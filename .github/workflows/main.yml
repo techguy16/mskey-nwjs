@@ -83,6 +83,7 @@ jobs:
           "author": "",
           "license": "AGPL-3"
         }' > mskey-web/src/package.json
+        ls mskey-web/src/*
 
     - name: Install NW.js Builder
       run: |
