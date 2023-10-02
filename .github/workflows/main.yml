@@ -1,0 +1,73 @@
+name: Build and Package mskey-web
+
+on:
+  push:
+    branches:
+      - main # You can change this to your desired branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Set up Rust Toolchain
+      uses: brndnmtthws/rust-action-rustup@v1
+
+    - name: Install Node.js and npm
+      run: |
+        sudo apt update
+        sudo apt install -y nodejs npm
+        npm install -g nw@0.14.7
+
+    - name: Clone Repository and Build
+      run: |
+        git clone https://github.com/anpage/mskey-web
+        cd mskey-web
+        cargo install trunk
+        wget https://raw.githubusercontent.com/UMSKT/UMSKT/master/keys.json
+        trunk build --release
+        mv ./dist/* ..
+
+    - name: Move mskey-web to src
+      run: |
+        mv ./mskey-web ./src
+        echo '{
+          "name": "src",
+          "version": "1.0.0",
+          "description": "",
+          "main": "index.html",
+          "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1"
+          },
+          "window": {
+            "title": "MSKT",
+            "toolbar": true,
+            "width": 800,
+            "height": 600,
+            "min_width": 500,
+            "min_height": 400,
+            "max_width": 1920,
+            "max_height": 1080,
+            "position": "mouse"
+          },
+          "keywords": [],
+          "author": "",
+          "license": "AGPL-3"
+        }' > ./src/package.json
+
+    - name: Install NW.js Builder
+      run: |
+        npm install nw-builder
+
+    - name: Build NW.js Application
+      run: |
+        npx nwbuild --platforms win32,win64,osx64,linux32,linux64 --buildDir dist/ src/
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: dist
+        path: dist/
