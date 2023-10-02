@@ -30,14 +30,12 @@ jobs:
         wget https://raw.githubusercontent.com/UMSKT/UMSKT/master/keys.json
         rustup target add wasm32-unknown-unknown
         trunk build --release
-        mv -r ./dist/* ..
         pwd
         ls
 
     - name: Move mskey-web to src
       run: |
         pwd
-        mv -r ./mskey-web ./src
         ls
         echo '{
           "name": "src",
@@ -61,7 +59,7 @@ jobs:
           "keywords": [],
           "author": "",
           "license": "AGPL-3"
-        }' > src/package.json
+        }' > mskey-web/dist/package.json
         echo '{
           "name": "src",
           "version": "1.0.0",
@@ -84,8 +82,7 @@ jobs:
           "keywords": [],
           "author": "",
           "license": "AGPL-3"
-        }' > package.json
-        ls src/
+        }' > mskey-web/src/package.json
 
     - name: Install NW.js Builder
       run: |
@@ -94,7 +91,7 @@ jobs:
     - name: Build NW.js Application
       run: |
         pwd
-        npx nwbuild --platforms win32,win64,osx64,linux32,linux64 --buildDir dist/ src/
+        npx nwbuild --platforms win32,win64,osx64,linux32,linux64 --buildDir dist/ mskey-web/src/
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v2
