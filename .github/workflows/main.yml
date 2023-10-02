@@ -31,9 +31,11 @@ jobs:
         rustup target add wasm32-unknown-unknown
         trunk build --release
         mv ./dist/* ..
+        pwd
 
     - name: Move mskey-web to src
       run: |
+        pwd
         mv ./mskey-web ./src
         echo '{
           "name": "src",
@@ -88,6 +90,7 @@ jobs:
 
     - name: Build NW.js Application
       run: |
+        pwd
         npx nwbuild --platforms win32,win64,osx64,linux32,linux64 --buildDir dist/ src/
 
     - name: Upload Artifacts
