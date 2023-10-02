@@ -58,6 +58,29 @@ jobs:
           "author": "",
           "license": "AGPL-3"
         }' > ./src/package.json
+        echo '{
+          "name": "src",
+          "version": "1.0.0",
+          "description": "",
+          "main": "index.html",
+          "scripts": {
+            "test": "echo \"Error: no test specified\" && exit 1"
+          },
+          "window": {
+            "title": "MSKT",
+            "toolbar": true,
+            "width": 800,
+            "height": 600,
+            "min_width": 500,
+            "min_height": 400,
+            "max_width": 1920,
+            "max_height": 1080,
+            "position": "mouse"
+          },
+          "keywords": [],
+          "author": "",
+          "license": "AGPL-3"
+        }' > ./package.json
 
     - name: Install NW.js Builder
       run: |
