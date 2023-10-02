@@ -28,6 +28,7 @@ jobs:
         cd mskey-web
         cargo install trunk
         wget https://raw.githubusercontent.com/UMSKT/UMSKT/master/keys.json
+        rustup target add wasm32-unknown-unknown
         trunk build --release
         mv ./dist/* ..
 
